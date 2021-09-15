@@ -1,10 +1,10 @@
 from tkinter import *
 from tkinter import filedialog, messagebox
 
-# from MetodosMaquina import MetodosMaquina
+from MetodosMaquina import MetodosMaquina
 
 raizPre = Tk()
-# M = MetodosMaquina()
+M = MetodosMaquina()
 
 
 # **********************************************************************************************************************
@@ -13,8 +13,11 @@ raizPre = Tk()
 
 
 def verDocumentacion():
-    print("docu")
-    # M.mostrarDocumentacion()
+    M.mostrarDocumentacion()
+
+
+def reportarEnHTML():
+    M.mostrarReporteHTML()
 
 
 def abrir_cargarArchivo():
@@ -27,10 +30,6 @@ def abrir_cargarArchivo():
     else:
         print(rutaFichero)
         # M.cargarArchivo(rutaFichero)
-
-
-def resetear():
-    messagebox.showwarning("Abrir Archivo", "No ha Elegido ningún Archivo...")
 
 
 # **********************************************************************************************************************
@@ -65,7 +64,7 @@ def abrirVentanaPrincipal():
     archivoMenu.config(fg="#00FF00", bg="#454545", font=("Comic Sans MS", 10))
 
     peticionesMenu = Menu(barraMenu, tearoff=0)
-    peticionesMenu.add_command(label="- Ver HTML..")
+    peticionesMenu.add_command(label="- Ver HTML..", command=reportarEnHTML)
     peticionesMenu.add_command(label="- Ver Graphviz..")
     peticionesMenu.config(fg="#00FF00", bg="#454545", font=("Comic Sans MS", 10))
 
