@@ -20,16 +20,27 @@ def reportarEnHTML():
     M.mostrarReporteHTML()
 
 
-def abrir_cargarArchivo():
+def cargarAjustesMaquina():
     # try:
-    rutaFichero = filedialog.askopenfilename(title="Abrir Archivo", initialdir="C:\\Users\\Maria\\Desktop",
+    rutaFichero = filedialog.askopenfilename(title="Abrir Archivo Máquina", initialdir="C:\\Users\\Maria\\Desktop",
                                              filetypes=(
                                                  ("Ficheros XML", "*.xml"), ("Todos los ficheros", "*.*")))
     if rutaFichero is None:
         messagebox.showinfo("Abrir Archivo", "No ha Elegido ningún Archivo...")
     else:
         print(rutaFichero)
-        # M.cargarArchivo(rutaFichero)
+        M.cargarAjustesMaquina(rutaFichero)
+
+
+def cargarMasivaProductos():
+    rutaFichero = filedialog.askopenfilename(title="Abrir Archivo", initialdir="C:\\Users\\Maria\\Desktop",
+                                             filetypes=(
+                                                 ("Ficheros XML", "*.xml"), ("Todos los ficheros", "*.*")))
+    if rutaFichero is None:
+        messagebox.showinfo("Abrir Archivo Productos", "No ha Elegido ningún Archivo...")
+    else:
+        print(rutaFichero)
+        M.cargarMasivaProductos(rutaFichero)
 
 
 # **********************************************************************************************************************
@@ -57,8 +68,8 @@ def abrirVentanaPrincipal():
     raiz.config(menu=barraMenu)
 
     archivoMenu = Menu(barraMenu, tearoff=0)
-    archivoMenu.add_command(label="- Configurar Máquina..")
-    archivoMenu.add_command(label="- Cargar Coponentes...", command=abrir_cargarArchivo)
+    archivoMenu.add_command(label="- Configurar Máquina..", command=cargarAjustesMaquina)
+    archivoMenu.add_command(label="- Cargar Coponentes...", command=cargarMasivaProductos)
     archivoMenu.add_separator()
     archivoMenu.add_command(label="-Salir del Juego", command=raiz.destroy)
     archivoMenu.config(fg="#00FF00", bg="#454545", font=("Comic Sans MS", 10))
