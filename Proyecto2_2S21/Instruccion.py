@@ -1,6 +1,6 @@
 class Instruccion:
 
-    def __init__(self, idInstruccion, noLinea=None, componente=None):
+    def __init__(self, idInstruccion, idBrazo=None, componente=None):
         self.idInstruccion = idInstruccion
-        self.noLinea = noLinea
+        self.noLinea = idBrazo
         self.componente = componente

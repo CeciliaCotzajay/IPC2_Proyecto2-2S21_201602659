@@ -1,6 +1,5 @@
 class NodoBrazo:
 
-    def __init__(self, noombre=None, brazo=None, siguiente=None):
-        self.noombre = noombre
+    def __init__(self, brazo=None, siguiente=None):
         self.brazo = brazo
         self.siguiente = siguiente

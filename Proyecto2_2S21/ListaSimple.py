@@ -1,14 +1,14 @@
-from NodoBrazo import NodoBrazo
+from NodoSimple import NodoSimple
 
 
-class ListaBrazos:
+class ListaSimple:
 
     def __init__(self):
         self.primero = None
         self.tam = 0
 
-    def insertar(self, Brazo):
-        nuevo = NodoBrazo(brazo=Brazo)
+    def insertar(self, noombreSimulacion, idproductoEnsamblado, listaBrazos):
+        nuevo = NodoSimple(nombreSimulacion=noombreSimulacion, idProductoEnsamblado=idproductoEnsamblado, ListaBrazos=listaBrazos)
         if self.tam == 0:
             self.primero = nuevo
             self.tam += 1
