@@ -40,7 +40,32 @@ class MetodosMaquina:
             nombreProducto = str(nombreProd.firstChild.data)
             # AQUI SE DEBEN GUARDAR LOS PRODUCTOSSSSSSSS
 
+    def generarXMLsalida(self, nombre):
+        salidaSimulacion = ET.Element('SalidaSimulacion')
+        nombreSalida = ET.SubElement(salidaSimulacion, "Nombre")
+        nombreArchivoSalida = 'nombreSalidaCualquiera:)'
+        nombreSalida.text = nombreArchivoSalida
+        listaProductos = ET.SubElement(salidaSimulacion, 'ListadoProductos')
+        # POR CADA PRODUCTO
+        producto = ET.SubElement(listaProductos, 'Producto')
+        nombreP = ET.SubElement(producto, 'Nombre')
+        nombreP.text = 'nombreProducto'
+        tiempoTotal = ET.SubElement(producto, 'TiempoTotal')
+        tiempoTotal.text = '>0000024'
+        elaboracionOptima = ET.SubElement(producto, 'ElaboracionOptima')
+        # POR CADA TIEMPO, POR CADA SEGUNDO
+        tiempo = ET.SubElement(elaboracionOptima, 'Tiempo')
+        tiempo.set('NoSegundo', '24')
+        # POR CADA LINEA_ENSAMBLAJE
+        lineaEnsamblaje = ET.SubElement(tiempo, 'LineaEnsamblaje')
+        lineaEnsamblaje.set('NoLinea', '24En')
 
+        datos = ET.tostring(salidaSimulacion, encoding="'utf-8'")
+        datos2 = minidom.parseString(datos)
+        texto = datos2.toprettyxml(indent='\t', encoding="'utf-8'")
+        texto2 = texto.decode('utf-8')
+        archivoXML = open(nombreArchivoSalida + '.xml', 'wb')
+        archivoXML.write(texto2)
 
     def mostrarDocumentacion(self):
         ruta = str("C:\\Users\\Maria\\Documents\\GitHub\\IPC2_Proyecto1_201602659_Jun\\[IPC2]Proyecto_2_2S2021.pdf")
