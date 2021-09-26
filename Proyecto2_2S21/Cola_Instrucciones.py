@@ -10,4 +10,8 @@ class Cola_Instrucciones:
         try:
             return self.items.pop(0)
         except:
-            raise ValueError("La cola de Instrucciones está Vacía..")
+            print("La cola de Instrucciones está Vacía..")
+            return None
+
+    def devolverTam(self):
+        return len(self.items)

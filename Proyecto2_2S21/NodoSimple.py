@@ -1,7 +1,5 @@
 class NodoSimple:
 
-    def __init__(self, nombreSimulacion, idProductoEnsamblado=None, ListaBrazos=None, siguiente=None):
-        self.nombreSimulacion = nombreSimulacion
-        self.idProductoEnsamblado = idProductoEnsamblado
-        self.ListaBrazos = ListaBrazos
+    def __init__(self, Simulacion=None, siguiente=None):
+        self.Simulacion = Simulacion
         self.siguiente = siguiente

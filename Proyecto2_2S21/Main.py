@@ -43,6 +43,10 @@ def cargarMasivaProductos():
         M.cargarMasivaProductos(rutaFichero)
 
 
+def simulacionMasiva():
+    M.SimularMasivamente()
+
+
 # **********************************************************************************************************************
 # ***************************************** INTERFAZ GRÁFICA ***********************************************************
 # **********************************************************************************************************************
@@ -69,7 +73,7 @@ def abrirVentanaPrincipal():
 
     archivoMenu = Menu(barraMenu, tearoff=0)
     archivoMenu.add_command(label="- Configurar Máquina..", command=cargarAjustesMaquina)
-    archivoMenu.add_command(label="- Cargar Coponentes...", command=cargarMasivaProductos)
+    archivoMenu.add_command(label="- Cargar Productos a Ensamblar...", command=cargarMasivaProductos)
     archivoMenu.add_separator()
     archivoMenu.add_command(label="-Salir del Juego", command=raiz.destroy)
     archivoMenu.config(fg="#00FF00", bg="#454545", font=("Comic Sans MS", 10))
@@ -91,7 +95,7 @@ def abrirVentanaPrincipal():
     # ------------------------------------------------------------------------------------------------------------------
     # DATOS DE LOS JUGADORES
     # ------------------------------------------------------------------------------------------------------------------
-    botonMostrarDatos = Button(raiz, text="Refrescar Tablero")
+    botonMostrarDatos = Button(raiz, text="Simulación Masiva", command=simulacionMasiva)
     botonMostrarDatos.config(bg="#82E0AA", font=("Comic Sans MS", 10))
     botonMostrarDatos.place(x=50, y=40)
     botonMostrarDatos.config(cursor="hand2")
