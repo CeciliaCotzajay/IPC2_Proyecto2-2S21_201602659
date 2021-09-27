@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="'utf-8'"?>
+<SalidaSimulacion>
+	<Nombre>Simulacion 1</Nombre>
+	<ListadoProductos>
+		<Producto>
+			<Nombre>Guitarra</Nombre>
+			<TiempoTotal>10</TiempoTotal>
+			<ElaboracionOptima>
+				<Tiempo NoSegundo="1">
+					<LineaEnsamblaje NoLinea="L1">C1</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">C1</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="2">
+					<LineaEnsamblaje NoLinea="L1">EN</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">C2</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="3">
+					<LineaEnsamblaje NoLinea="L1">EN</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">s</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="4">
+					<LineaEnsamblaje NoLinea="L1">C2</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">EN</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="5">
+					<LineaEnsamblaje NoLinea="L1">C3</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">EN</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="6">
+					<LineaEnsamblaje NoLinea="L1">s</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">EN</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="7">
+					<LineaEnsamblaje NoLinea="L1">s</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">EN</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="8">
+					<LineaEnsamblaje NoLinea="L1">s</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">r</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="9">
+					<LineaEnsamblaje NoLinea="L1">EN</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">r</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="10">
+					<LineaEnsamblaje NoLinea="L1">EN</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">r</LineaEnsamblaje>
+				</Tiempo>
+			</ElaboracionOptima>
+		</Producto>
+	</ListadoProductos>
+	<Nombre>Simulacion 1</Nombre>
+	<ListadoProductos>
+		<Producto>
+			<Nombre>Piano</Nombre>
+			<TiempoTotal>14</TiempoTotal>
+			<ElaboracionOptima>
+				<Tiempo NoSegundo="1">
+					<LineaEnsamblaje NoLinea="L1">C1</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">C1</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="2">
+					<LineaEnsamblaje NoLinea="L1">C2</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">C2</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="3">
+					<LineaEnsamblaje NoLinea="L1">s</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">C3</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="4">
+					<LineaEnsamblaje NoLinea="L1">s</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">EN</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="5">
+					<LineaEnsamblaje NoLinea="L1">s</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">EN</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="6">
+					<LineaEnsamblaje NoLinea="L1">s</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">EN</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="7">
+					<LineaEnsamblaje NoLinea="L1">s</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">EN</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="8">
+					<LineaEnsamblaje NoLinea="L1">s</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">C2</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="9">
+					<LineaEnsamblaje NoLinea="L1">EN</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">C1</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="10">
+					<LineaEnsamblaje NoLinea="L1">EN</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">s</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="11">
+					<LineaEnsamblaje NoLinea="L1">r</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">EN</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="12">
+					<LineaEnsamblaje NoLinea="L1">r</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">EN</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="13">
+					<LineaEnsamblaje NoLinea="L1">r</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">EN</LineaEnsamblaje>
+				</Tiempo>
+				<Tiempo NoSegundo="14">
+					<LineaEnsamblaje NoLinea="L1">r</LineaEnsamblaje>
+					<LineaEnsamblaje NoLinea="L2">EN</LineaEnsamblaje>
+				</Tiempo>
+			</ElaboracionOptima>
+		</Producto>
+	</ListadoProductos>
+</SalidaSimulacion>

@@ -18,3 +18,13 @@ class ListaMovimientos:
                 actual = actual.siguiente
             actual.siguiente = nuevo
             self.tam += 1
+
+    def buscarPorSegundo(self, seg):
+        movimiento = None
+        actual = self.primero
+        if self.tam != 0:
+            while actual is not None:
+                if actual.Movimiento.noSegundo == seg:
+                    movimiento = actual.Movimiento
+                actual = actual.siguiente
+        return movimiento

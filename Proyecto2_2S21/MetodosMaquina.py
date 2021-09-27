@@ -104,7 +104,7 @@ class MetodosMaquina:
             else:
                 liBrazos = copy.deepcopy(self.listaGeneralBrazos)
                 productoEncon = copy.deepcopy(productoEncontrado)
-                simulacion = Simulacion(nombreSimulacion, "noListo", productoEncon, liBrazos)
+                simulacion = Simulacion(nombreSimulacion, "noListo", productoEncon, liBrazos, None)
                 self.listaSimulaciones.insertar(simulacion)
                 self.listaSimulaciones.setearComponentesEnsamblar(nombreSimulacion)
         print(self.listaSimulaciones.tam)
@@ -303,63 +303,95 @@ class MetodosMaquina:
                         actualB = actualB.siguiente
                     # ASIGNACION DE COLA A COLA
                     colaANTERIORdesencolar = copy.deepcopy(colaANTERIORencolar)
-                print(i-1)
+                print(i - 1)
                 actual.Simulacion.estado = "listo"
+                actual.Simulacion.tiempoTotal = i - 1
             actual = actual.siguiente
 
-    def generarXMLsalida(self, nombre):
+    def generarXMLsalida(self):
         salidaSimulacion = ET.Element('SalidaSimulacion')
-        nombreSalida = ET.SubElement(salidaSimulacion, "Nombre")
-        nombreArchivoSalida = 'nombreSalidaCualquiera:)'
-        nombreSalida.text = nombreArchivoSalida
-        listaProductos = ET.SubElement(salidaSimulacion, 'ListadoProductos')
-        # POR CADA PRODUCTO
-        producto = ET.SubElement(listaProductos, 'Producto')
-        nombreP = ET.SubElement(producto, 'Nombre')
-        nombreP.text = 'nombreProducto'
-        tiempoTotal = ET.SubElement(producto, 'TiempoTotal')
-        tiempoTotal.text = '>0000024'
-        elaboracionOptima = ET.SubElement(producto, 'ElaboracionOptima')
-        # POR CADA TIEMPO, POR CADA SEGUNDO
-        tiempo = ET.SubElement(elaboracionOptima, 'Tiempo')
-        tiempo.set('NoSegundo', '24')
-        # POR CADA LINEA_ENSAMBLAJE
-        lineaEnsamblaje = ET.SubElement(tiempo, 'LineaEnsamblaje')
-        lineaEnsamblaje.set('NoLinea', '24En')
+        self.crearArchivoHTML()
+        actual = self.listaSimulaciones.primero
+        while actual is not None:
+            if actual.Simulacion.estado == "listo":
+                nombre = actual.Simulacion.Nombre
+                linea0 = "Nombre Simulacion:" + nombre
+                self.escribirLineaHTML(linea0)
+                listabrazos = actual.Simulacion.ListaBrazos
+                ProductoE = actual.Simulacion.Producto
+                nombreSalida = ET.SubElement(salidaSimulacion, "Nombre")
+                nombreArchivoSalida = nombre
+                nombreSalida.text = nombreArchivoSalida
+                listaProductos = ET.SubElement(salidaSimulacion, 'ListadoProductos')
+                # PRODUCTO
+                producto = ET.SubElement(listaProductos, 'Producto')
+                nombreP = ET.SubElement(producto, 'Nombre')
+                nombreP.text = ProductoE.nombre
+                linea1 = "Nombre Simulacion:" + ProductoE.nombre
+                self.escribirLineaHTML(linea1)
+                tiempoTotal = ET.SubElement(producto, 'TiempoTotal')
+                tieTot = actual.Simulacion.tiempoTotal
+                tiempoTotal.text = str(tieTot)
+                linea2 = "TiempoTotal:" + str(tieTot)
+                self.escribirLineaHTML(linea2)
+                elaboracionOptima = ET.SubElement(producto, 'ElaboracionOptima')
+                j = 1
+                while j <= tieTot:
+                    # POR CADA TIEMPO, POR CADA SEGUNDO
+                    tiempo = ET.SubElement(elaboracionOptima, 'Tiempo')
+                    tiempo.set('NoSegundo', str(j))
+                    actualB = listabrazos.primero
+                    linea3 = "segundo:" + str(j)
+                    while actualB is not None:
+                        listaMov = actualB.brazo.listaMovimientos
+                        mov = listaMov.buscarPorSegundo(j)
+                        # POR CADA LINEA_ENSAMBLAJE
+                        lineaEnsamblaje = ET.SubElement(tiempo, 'LineaEnsamblaje')
+                        lineaEnsamblaje.set('NoLinea', str(actualB.brazo.idBrazo))
+                        lineaEnsamblaje.text = mov.estadoMovimiento
+                        linea4 = linea3 + " Linea:" + str(actualB.brazo.idBrazo)+ " Movimiento: "+ mov.estadoMovimiento
+                        self.escribirLineaHTML(linea2)
+                        actualB = actualB.siguiente
+                    j += 1
+            actual = actual.siguiente
 
-        datos = ET.tostring(salidaSimulacion, encoding="'utf-8'")
+        datos = ET.tostring(salidaSimulacion)
         datos2 = minidom.parseString(datos)
         texto = datos2.toprettyxml(indent='\t', encoding="'utf-8'")
-        texto2 = texto.decode('utf-8')
-        archivoXML = open(nombreArchivoSalida + '.xml', 'wb')
-        archivoXML.write(texto2)
+        # texto2 = texto.decode('utf-8')
+        archivoXML = open("ArchivoXML_Salida" + '.xml', 'wb')
+        archivoXML.write(texto)
+        archivoXML.close()
+        print("Archivo Creado Exitosamente!!!")
 
     def mostrarDocumentacion(self):
-        ruta = str("C:\\Users\\Maria\\Documents\\GitHub\\IPC2_Proyecto1_201602659_Jun\\[IPC2]Proyecto_2_2S2021.pdf")
+        ruta = str("C:\\Users\\Maria\\Documents\\GitHub\\IPC2_Proyecto1_201602659_Jun\\Ensayo-Proyecto2-IPC2.pdf")
         webbrowser.open_new(ruta)
 
     def mostrarReporteHTML(self):
         # ---------------------------------------------------------
         # ESTA LINEA SERÁ ELIMINADA Y  SERÁ CONVERTIDA EN PARAMETRO
-        nombre = "ReporteHTML"
-        # ---------------------------------------------------------
-        self.crearArchivoHTML(nombre)
-        self.escribirLineaHTML(nombre)
-        webbrowser.open_new_tab("C:\\Users\\Maria\\Desktop\\" + nombre + ".html")
+        # nombre = "ReporteHTML"
+        # # ---------------------------------------------------------
+        # self.crearArchivoHTML(nombre)
+        # self.escribirLineaHTML(nombre)
+        webbrowser.open_new_tab("C:\\Users\\Maria\\Desktop\\" + "ReporteHTML" + ".html")
 
-    def crearArchivoHTML(self, nombre):
-        archivo = open("C:\\Users\\Maria\\Desktop\\" + nombre + ".html", "w")
+    def crearArchivoHTML(self):
+        archivo = open("C:\\Users\\Maria\\Desktop\\" + "ReporteHTML" + ".html", "w")
         archivo.close()
 
-    def escribirLineaHTML(self, nombre):
-        lineaInicial = """<html>"""
+    def escribirLineaHTML(self, linea):
+        lineaInicial = """<html>
+        <br><br><center><p>Simulación Máquina</p></center><br><br>
+        <h1><center>Tabla de Ensamblaje</center></h1>
+        <br>"""
         # ---------------------------------------------------------
         # ESTA LINEA SERÁ ELIMINADA Y  SERÁ CONVERTIDA EN PARAMETRO
-        linea = """<br><br><center><p>Hola a todos!!! :)</p></center><br>"""
         # ---------------------------------------------------------
         self.cadenaEscritura += linea
         lineafinal = """</html>"""
         unificado = lineaInicial + self.cadenaEscritura + lineafinal
-        archivo = open("C:\\Users\\Maria\\Desktop\\" + nombre + ".html", "a")
+        archivo = open("C:\\Users\\Maria\\Desktop\\" + "ReporteHTML" + ".html", "a")
         archivo.write(unificado)
         archivo.close()

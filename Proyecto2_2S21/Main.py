@@ -46,6 +46,9 @@ def cargarMasivaProductos():
 def simulacionMasiva():
     M.simularMasivamente()
 
+def reporteXML():
+    M.generarXMLsalida()
+
 
 # **********************************************************************************************************************
 # ***************************************** INTERFAZ GRÁFICA ***********************************************************
@@ -81,6 +84,7 @@ def abrirVentanaPrincipal():
     peticionesMenu = Menu(barraMenu, tearoff=0)
     peticionesMenu.add_command(label="- Ver HTML..", command=reportarEnHTML)
     peticionesMenu.add_command(label="- Ver Graphviz..")
+    peticionesMenu.add_command(label="- Ver XML..", command=reporteXML)
     peticionesMenu.config(fg="#00FF00", bg="#454545", font=("Comic Sans MS", 10))
 
     ayudaMenu = Menu(barraMenu, tearoff=0)
