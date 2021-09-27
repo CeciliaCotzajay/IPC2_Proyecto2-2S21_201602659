@@ -6,12 +6,14 @@ import copy
 import prettify
 
 from Brazo import Brazo
-from Cola_ComponentesEnsamblar import Cola_ComponentesEnsamblar
 from Cola_Instrucciones import Cola_Instrucciones
+from Cola_ComponentesEnsamblar import Cola_ComponentesEnsamblar
 from Instruccion import Instruccion
 from ListaBrazos import ListaBrazos
+from ListaMovimientos import ListaMovimientos
 from ListaProductos import ListaProductos
 from ListaSimple import ListaSimple
+from Movimiento import Movimiento
 from Producto import Producto
 from Simulación import Simulacion
 
@@ -41,7 +43,7 @@ class MetodosMaquina:
                         tiemEnsam = lineaProd.getElementsByTagName("TiempoEnsamblaje")[0]
                         tiempoEnsamble = int(tiemEnsam.firstChild.data)
                         if tiempoEnsamble > 0:
-                            brazo = Brazo("L"+str(idLinea), "C"+str(cantComponentes), tiempoEnsamble, None, None)
+                            brazo = Brazo("L" + str(idLinea), "C" + str(cantComponentes), tiempoEnsamble, None, None)
                             self.listaGeneralBrazos.insertar(brazo)
                         else:
                             print("El Timempo de Ensamblaje debe ser mayor a 0")
@@ -75,7 +77,7 @@ class MetodosMaquina:
                         ins = str(e).split("p")
                         idbrazo = ins[0]
                         componente = ins[1]
-                        instruccion = Instruccion(i, idbrazo, componente, None, None)
+                        instruccion = Instruccion(i, idbrazo, componente, "noListo", None)
                         colaInstrucciones.encolar(instruccion)
                     producto = Producto(p, nombreProducto, colaInstrucciones)
                     # print(colaInstrucciones.devolverTam())
@@ -106,6 +108,204 @@ class MetodosMaquina:
                 self.listaSimulaciones.insertar(simulacion)
                 self.listaSimulaciones.setearComponentesEnsamblar(nombreSimulacion)
         print(self.listaSimulaciones.tam)
+
+    def simularMasivamente(self):
+        actual = self.listaSimulaciones.primero
+        while actual is not None:
+            if actual.Simulacion.estado == "noListo":
+                print(actual.Simulacion.Nombre)
+                print(actual.Simulacion.Producto.nombre)
+                listabrazos = actual.Simulacion.ListaBrazos
+                colaINSTRUCCIONES = actual.Simulacion.Producto.colaInstrucciones
+                colaInstruccionesC = copy.deepcopy(colaINSTRUCCIONES)  #
+                # SI ES 0 NO ESTA ENSAMBLANDO SI ES 1 SI ESTA ENSAMBLANDO
+                movAnteiriorEnsamble = None
+                ensamblando = 0
+                contEnsamble = 0
+                i = 0
+                colaANTERIORdesencolar = None  # SOLO DESENCOLAR
+                while colaInstruccionesC.devolverTam() > 0:
+                    i += 1
+                    colaANTERIORencolar = Cola_ComponentesEnsamblar()  # SOLO ENCOLAR
+                    actualB = listabrazos.primero
+                    while actualB is not None:
+                        # ############################## PRIMERA LINEA O SEGUNDO #######################################
+                        if actualB.brazo.listaMovimientos is None:
+                            listaMovimiento = ListaMovimientos()
+                            if actualB.brazo.colaComponentesEnsamblar is None:
+                                movimiento = Movimiento("--", i)
+                                listaMovimiento.insertar(movimiento)
+                                colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                            else:
+                                movimiento = Movimiento("C" + str(i), i)
+                                listaMovimiento.insertar(movimiento)
+                                colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                            actualB.brazo.listaMovimientos = listaMovimiento
+                        # ################################ EL RESTO DE LINEAS ##########################################
+                        else:
+                            listaMovimiento = actualB.brazo.listaMovimientos
+                            movimientoAnterior = colaANTERIORdesencolar.desencolar()
+                            primInstruccion = colaInstruccionesC.retornarPrimero()
+                            primComponenteEnsamblar = actualB.brazo.colaComponentesEnsamblar.retornarPrimero()  #
+                            # SI SE ESTA ENSAMBLANDO********************************************************************
+                            if ensamblando == 0:
+                                # SI ESTADO ES NADA---------------------------------------------
+                                if movimientoAnterior == "--":
+                                    movimiento = Movimiento("--", i)
+                                    listaMovimiento.insertar(movimiento)
+                                    colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                # SI ESTADO ES REPOSO------------------------------------------r
+                                if movimientoAnterior == "r":
+                                    movimiento = Movimiento("r", i)
+                                    listaMovimiento.insertar(movimiento)
+                                    colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                # SI ESTADO ES ESPERA------------------------------------------s
+                                if movimientoAnterior == "s":
+                                    idBrazoInstruccion = primInstruccion.idBrazo
+                                    idComponenteInstruccion = primInstruccion.componente
+                                    idbrazoActual = actualB.brazo.idBrazo
+                                    compoColaEnsam = actualB.brazo.colaComponentesEnsamblar.retornarPrimero()
+                                    # VERIFICA SI EL COMPONENETE Y BRAZO SON LOS DE LA PRIMERA INSTRUCCION EN COLA
+                                    if idbrazoActual == idBrazoInstruccion and compoColaEnsam == idComponenteInstruccion:
+                                        ensamblando = 1
+                                        movimiento = Movimiento("EN", i)
+                                        listaMovimiento.insertar(movimiento)
+                                        colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                        contEnsamble += 1
+                                    # SE QUEDA CON ESTADO ESPERA
+                                    else:
+                                        movimiento = Movimiento("s", i)
+                                        listaMovimiento.insertar(movimiento)
+                                        colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                # SI ESTADO ES UN COMPONENTE Y EN COLA A ENSAMBLAR--------------
+                                if "C" in movimientoAnterior:
+                                    if movimientoAnterior == primComponenteEnsamblar:
+                                        idBrazoInstruccion = primInstruccion.idBrazo
+                                        idComponenteInstruccion = primInstruccion.componente
+                                        idbrazoActual = actualB.brazo.idBrazo
+                                        # VERIFICA SI EL COMPONENETE Y BRAZO SON LOS DE LA PRIMERA INSTRUCCION EN COLA
+                                        if idbrazoActual == idBrazoInstruccion and movimientoAnterior == idComponenteInstruccion:
+                                            movAnteiriorEnsamble = copy.deepcopy(movimientoAnterior)
+                                            ensamblando = 1
+                                            movimiento = Movimiento("EN", i)
+                                            listaMovimiento.insertar(movimiento)
+                                            colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                            contEnsamble += 1
+                                        # SE QUEDA CON ESTADO ESPERA
+                                        else:
+                                            movimiento = Movimiento("s", i)
+                                            listaMovimiento.insertar(movimiento)
+                                            colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                    # SI ESTADO ES UN COMPONENTE Y EN NO ESTA EN COLA A ENSAMBLAR-----
+                                    else:
+                                        c = int(movimientoAnterior.replace("C", ""))
+                                        cp = int(primComponenteEnsamblar.replace("C", ""))
+                                        limCom = int(actualB.brazo.cantComponentes.replace("C", ""))
+                                        # AVANZAR BRAZO
+                                        if c < cp and c <= limCom:
+                                            movimiento = Movimiento("C" + str(c + 1), i)
+                                            listaMovimiento.insertar(movimiento)
+                                            colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                        # RETROCEDER BRAZO
+                                        if c > cp and c > 0:
+                                            movimiento = Movimiento("C" + str(c - 1), i)
+                                            listaMovimiento.insertar(movimiento)
+                                            colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                            # SI SE ESTA ENSAMBLANDO********************************************************************
+                            else:
+                                # SI ESTADO ES NADA---------------------------------------------
+                                if movimientoAnterior == "--":
+                                    movimiento = Movimiento("--", i)
+                                    listaMovimiento.insertar(movimiento)
+                                    colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                # SI ESTADO ES REPOSO------------------------------------------r
+                                if movimientoAnterior == "r":
+                                    movimiento = Movimiento("r", i)
+                                    listaMovimiento.insertar(movimiento)
+                                    colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                # SI ESTADO ES ESPERA------------------------------------------s
+                                if movimientoAnterior == "s":
+                                    movimiento = Movimiento("s", i)
+                                    listaMovimiento.insertar(movimiento)
+                                    colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                # ES ESTADO ES ENSAMBLE----------------------------------------EN
+                                if movimientoAnterior == "EN":
+                                    tiempoEnsamblaje = actualB.brazo.tiempoEnsamblaje
+                                    # SI NO HA LLEGADO AL TIEMPO DE ENSAMBLAJE
+                                    if contEnsamble < tiempoEnsamblaje:
+                                        movimiento = Movimiento("EN", i)
+                                        listaMovimiento.insertar(movimiento)
+                                        colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                        contEnsamble += 1
+                                    # SI YA LLEGO AL TIEMPO DE ENSAMBLAJE
+                                    else:
+                                        # SI AUN HAY COMPONENTES EN LA COLA DE COMPONENTES A ENSAMBLAR
+                                        ensamblando = 0
+                                        contEnsamble = 0
+                                        # ELIMINA LA INSTRUCCION EN LA COLA INSTRUCCIONES
+                                        instru = colaInstruccionesC.desencolar()
+                                        colaINSTRUCCIONES.cambiarEstadoInstruccion(instru)
+                                        actualB.brazo.colaComponentesEnsamblar.desencolar()
+                                        if actualB.brazo.colaComponentesEnsamblar.devolverTam() == 0:
+                                            movimiento = Movimiento("r", i)
+                                            listaMovimiento.insertar(movimiento)
+                                            colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                        # SI YA NO HAY COMPONENTES EN LA COLA DE COMPONENTES A ENSAMBLAR
+                                        else:
+                                            primComponenteEnsamblar = actualB.brazo.colaComponentesEnsamblar.retornarPrimero()
+                                            c = int(movAnteiriorEnsamble.replace("C", ""))
+                                            cp = int(primComponenteEnsamblar.replace("C", ""))
+                                            limCom = int(actualB.brazo.cantComponentes.replace("C", ""))
+                                            # AVANZAR BRAZO
+                                            if c < cp and c <= limCom:
+                                                movimiento = Movimiento("C" + str(c + 1), i)
+                                                listaMovimiento.insertar(movimiento)
+                                                colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                            # RETROCEDER BRAZO
+                                            if c > cp and c > 0:
+                                                movimiento = Movimiento("C" + str(c - 1), i)
+                                                listaMovimiento.insertar(movimiento)
+                                                colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                # SI ESTADO ES UN COMPONENTE Y EN COLA A ENSAMBLAR--------------
+                                if "C" in movimientoAnterior:
+                                    if movimientoAnterior == primComponenteEnsamblar:
+                                        idBrazoInstruccion = primInstruccion.idBrazo
+                                        idComponenteInstruccion = primInstruccion.componente
+                                        idbrazoActual = actualB.brazo.idBrazo
+                                        # VERIFICA SI EL COMPONENETE Y BRAZO SON LOS DE LA PRIMERA INSTRUCCION EN COLA
+                                        if idbrazoActual == idBrazoInstruccion and movimientoAnterior == idComponenteInstruccion:
+                                            movAnteiriorEnsamble = copy.deepcopy(movimientoAnterior)
+                                            ensamblando = 1
+                                            movimiento = Movimiento("EN", i)
+                                            listaMovimiento.insertar(movimiento)
+                                            colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                            contEnsamble += 1
+                                        # SE QUEDA CON ESTADO ESPERA
+                                        else:
+                                            movimiento = Movimiento("s", i)
+                                            listaMovimiento.insertar(movimiento)
+                                            colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                    # SI ESTADO ES UN COMPONENTE Y EN NO ESTA EN COLA A ENSAMBLAR-----
+                                    else:
+                                        c = int(movimientoAnterior.replace("C", ""))
+                                        cp = int(primComponenteEnsamblar.replace("C", ""))
+                                        limCom = int(actualB.brazo.cantComponentes.replace("C", ""))
+                                        # AVANZAR BRAZO
+                                        if c < cp and c <= limCom:
+                                            movimiento = Movimiento("C" + str(c + 1), i)
+                                            listaMovimiento.insertar(movimiento)
+                                            colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                                        # RETROCEDER BRAZO
+                                        if c > cp and c > 0:
+                                            movimiento = Movimiento("C" + str(c - 1), i)
+                                            listaMovimiento.insertar(movimiento)
+                                            colaANTERIORencolar.encolar(movimiento.estadoMovimiento)
+                        actualB = actualB.siguiente
+                    # ASIGNACION DE COLA A COLA
+                    colaANTERIORdesencolar = copy.deepcopy(colaANTERIORencolar)
+                print(i-1)
+                actual.Simulacion.estado = "listo"
+            actual = actual.siguiente
 
     def generarXMLsalida(self, nombre):
         salidaSimulacion = ET.Element('SalidaSimulacion')

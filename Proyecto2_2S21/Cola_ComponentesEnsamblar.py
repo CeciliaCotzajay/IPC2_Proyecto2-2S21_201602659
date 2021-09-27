@@ -20,3 +20,16 @@ class Cola_ComponentesEnsamblar:
     def imprimir(self):
         for i in self.items:
             print(i)
+
+    def buscarComponente(self, componente):
+        Componente = None
+        if self.items[0] == componente:
+            Componente = self.items[0]
+        return Componente
+
+    def retornarPrimero(self):
+        try:
+            return self.items[0]
+        except:
+            print("La cola de Componentes a ensamblar está Vacía..")
+            return None

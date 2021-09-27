@@ -44,7 +44,7 @@ def cargarMasivaProductos():
 
 
 def simulacionMasiva():
-    M.SimularMasivamente()
+    M.simularMasivamente()
 
 
 # **********************************************************************************************************************
@@ -93,11 +93,14 @@ def abrirVentanaPrincipal():
     barraMenu.add_cascade(label="Ayuda", menu=ayudaMenu)
     barraMenu.config(fg="#00FF00", bg="#454545", font=("Comic Sans MS", 10))
     # ------------------------------------------------------------------------------------------------------------------
-    # DATOS DE LOS JUGADORES
+    # DATOS SIMULACION MASIVA
     # ------------------------------------------------------------------------------------------------------------------
+    Label(frameP, text="Simulación Masiva", justify="center", bg="black", fg="White",
+          font=("Comic Sans MS", 14)).place(x=300, y=2)
+
     botonMostrarDatos = Button(raiz, text="Simulación Masiva", command=simulacionMasiva)
     botonMostrarDatos.config(bg="#82E0AA", font=("Comic Sans MS", 10))
-    botonMostrarDatos.place(x=50, y=40)
+    botonMostrarDatos.place(x=50, y=45)
     botonMostrarDatos.config(cursor="hand2")
     # ------------------------------------------------------------------------------------------------------------------
     # ------------------------------------------------------------------------------------------------------------------
